@@ -1,0 +1,93 @@
+---
+---
+<h2>queue</h2>
+
+<div class="row">
+  <div class="col-md-4">
+    <a href="#request.abort">abort</a><br>
+    <a href="#mapsense.queue.image">image</a><br>
+    <a href="#mapsense.queue.json">json</a><br>
+    <a href="#mapsense.queue.octetStream">octetStream</a><br>
+    <a href="#mapsense.queue">queue</a><br>
+    <a href="#mapsense.queue.text">text</a><br>
+    <a href="#mapsense.queue.xml">xml</a><br>
+  </div>
+</div>
+
+<hr class="space"/>
+
+<dl class="function" id="mapsense.queue">
+  <dt>
+    <i>mapsense</i>.<b>queue</b>
+  </dt>
+  <dd>
+    The queue manages asynchronous requests for network resources.
+  </dd>
+</dl>
+
+<dl class="function" id="mapsense.queue.text">
+  <dt>
+    <i>mapsense</i>.<b>queue</b>.<b>text</b>(<i>url</i>, <i>callback</i>[, <i>t</i>])
+  </dt>
+  <dd>
+    Creates a new request for the text data at the specified
+    <i>url</i>. Upon successful completion, the supplied function
+    <i>callback</i> is invoked with the response text.
+  </dd>
+</dl>
+
+<dl class="function" id="mapsense.queue.json">
+  <dt>
+    <i>mapsense</i>.<b>queue</b>.<b>json</b>(<i>url</i>, <i>callback</i>)
+  </dt>
+  <dd>
+    Creates a new request for the JSON data at the specified
+    <i>url</i>. Upon successful completion, the supplied function
+    <i>callback</i> is invoked with the response JSON data.
+  </dd>
+</dl>
+
+<dl class="function" id="mapsense.queue.xml">
+  <dt>
+    <i>mapsense</i>.<b>queue</b>.<b>xml</b>(<i>url</i>, <i>callback</i>)
+  </dt>
+  <dd>
+    Creates a new request for the XML data at the specified
+    <i>url</i>. Upon successful completion, the supplied function
+    <i>callback</i> is invoked with the response XML data.
+  </dd>
+</dl>
+
+<dl class="function" id="mapsense.queue.octetStream">
+  <dt>
+    <i>mapsense</i>.<b>queue</b>.<b>octetStream</b>(<i>url</i>, <i>callback</i>)
+  </dt>
+  <dd>
+    Creates a new request for the XML data at the specified <i>url</i>.
+    Upon successful completion, the supplied function <i>callback</i>
+    is invoked with the response data represented as an ArrayBuffer.
+  </dd>
+</dl>
+
+<dl class="function" id="mapsense.queue.image">
+  <dt>
+    <i>mapsense</i>.<b>queue</b>.<b>image</b>(<i>i</i>, <i>url</i>, <i>callback</i>)
+  </dt>
+  <dd>
+    Creates a new request for the image at the specified <i>url</i> and
+    associates it with the SVG image element <i>i</i>. Upon successful
+    completion the supplied function <i>callback</i> is invoked.
+  </dd>
+</dl>
+
+<dl class="function" id="request.abort">
+  <dt>
+    <i>request</i>.<b>abort</b>(<i>hard</i>)
+  </dt>
+  <dd>
+    Removes the specified request from the queue. If <i>hard</i> is
+    specified and the type of request supports such cancelation, the
+    request is canceled even if it has been started. Returns true if
+    the request was found in the queue and false otherwise.
+  </dd>
+</dl>

@@ -10,5 +10,13 @@ url: "http://yourdomain.com" # the base hostname & protocol for your site
 twitter_username: jekyllrb
 github_username:  jekyll
 
+defaults:
+-
+  scope:
+    path: "" # an empty string here means all files in the project
+  values:
+    layout: "pageWithSidebar"
+
+
 # Build settings
 markdown: kramdown

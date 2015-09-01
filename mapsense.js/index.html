@@ -1,0 +1,99 @@
+---
+rootPage: true
+---
+
+    <h2>Quick Start</h2>
+    <hr class="space"/>
+
+    <p><b>Mapsense.js</b> is a JavaScript library for vector maps in the browser.
+    It brings the scalability of tiled geographic datasets to the interactivity, control, and dynamism of D3.
+    A D3 selection is maintained across incoming tiles, letting you set things like styles or interaction just once.
+    Mapsense.js is based on the <a href='http://www.polymaps.org' target="_blank">Polymaps</a> API, but uses <a href='http://www.d3js.org' target="_blank">D3</a> to handle drawing and selection.
+    Having a basic <a href='https://github.com/mbostock/d3/wiki' target="_blank">understanding</a> of D3 will make using Mapsense.js a snap.
+    Read these docs to learn more about Mapsense.js.</p>
+
+    <p><b> Mapsense Data </b> is a source of vector map data for creating interactive data driven maps. Data tiles are generated dynamically in response to a tile request, letting you control precisely what features and properties are returned. </p><br/>
+    <h4><b>Initialization</b></h4>
+
+    First of all, we need to include d3.js, topojson.js and mapsense.js:
+
+    <pre class="prettyprint lang-js ">
+&ltscript src="http://d3js.org/d3.v3.min.js" charset="utf-8"&gt&lt/script&gt
+&ltscript src="http://d3js.org/topojson.v1.min.js" charset="utf-8"&gt&lt/script&gt
+&ltscript src="mapsense.js" charset="utf-8"&gt&lt/script&gt</pre>
+
+    You will need to create a node in the DOM for the map to be contained in with a unique ID:
+
+    <pre class="prettyprint lang-js ">
+&ltdiv id="myMap"&gt&lt/div&gt</pre>
+    Now let's create a map and initialize it.  Here we create the map with a string representing the id attribute of the DOM node which the map will be contained in, and then call .center() and .zoom() to specify the initial viewpoint of the map.
+
+    <pre class="prettyprint lang-js ">
+var map = mapsense.map("#myMap")
+  .center({lon: -122.410886, lat: 37.787041})
+  .zoom(14);</pre>
+    <br/>
+
+    <h4><b>Accessing and modifying map features</b></h4>
+
+    One way to access individual map features in geoJson or topoJson layers before they are displayed is by using the selection() method.  This method sets a function that will be called on the D3 selection representing all of the geoJson (or topoJson) data in the map.  For example, to give all buildings a special class:
+
+    <pre class="prettyprint lang-js ">
+baseMapLayer.selection(function(d){
+  d.attr("class", function(feature){
+    if(feature.sub_layer == "building") {
+      return "my_pretty_building";
+    });</pre>
+
+    Another option for accessing and formatting map data is to specify a load event handler.  The handler will be called after each tile is loaded and will be passed the tile containing the raw topology and the projection.  To access or mutate the feature list for geoJson or topoJson maps use tile.features(), which either returns the feature list, or sets the feature list if passed an argument.
+
+    <pre class="prettyprint lang-js ">
+var layer = mapsense.topoJson().on("load", loadLayer);
+...
+function loadLayer(tile, projection) {
+  var newFeatures = [];
+  tile.features().forEach(function(feature){
+    var newFeature = processFeature(feature);  // processFeature performs some mutation on feature
+    newFeatures.push(newFeature);
+  }
+  tile.features(newFeatures);
+}</pre>
+  <br/>
+    <h4><b>geoJson and topoJson layers</b></h4>
+
+    To bring static geoJson data in to your map, you can use d3's json function to load a local geojson file:
+<pre class="prettyprint lang-js ">
+d3.json("my_data.geojson", function(data){
+  map.add(mapsense.geoJson()
+    .features(data.features)
+    .selection(function(d){
+        d.attr("class", "neighborhood");
+    })
+  );
+});</pre>
+
+  To load a remote topoJson layer, we specify the url when we create the layer.
+<pre class="prettyprint lang-js ">
+var hurricaneUrl = "https://{S}-sample.com/hurricanes/{Z}/{X}/{Y}.topojson";
+var hurricaneLayer = mapsense.topoJson().url(mapsense.url(hurricaneUrl).hosts(['a','b','c','d']));
+map.add(hurricaneLayer);</pre>
+    <br/>
+    <h4><b>Custom layers</b></h4>
+
+    Custom layers can be created by extending either the layer, geoJson, or topoJson classes and providing a map() function which takes the map object as an argument as well as registering any event listeners for that layer.  The event listeners should call map.pan() and map.zoom() to manipulate the map view point if needed.
+    <pre class="prettyprint lang-js ">
+var myLayer = function() {
+  var myLayer = mapsense.geoJson();
+
+  var __map__ = myLayer.map;
+  myLayer.map = function(m) {
+    if (!arguments.length) return __map__();
+    __map__(m);
+    // add event listeners and do any other initialization
+    window.addEventListener("mousedownCallback", mousedown, false);
+  }
+
+  return myLayer;
+}
+...
+map.add(myLayer());</pre>
